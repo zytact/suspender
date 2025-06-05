@@ -1,54 +1,158 @@
-# React + TypeScript + Vite
+# Suspender
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Chrome extension built with React and TypeScript that allows you to efficiently manage and suspend browser tabs to reduce memory usage and improve performance.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Tab Management**: View all open tabs in a clean, organized interface
+- **Individual Tab Suspension**: Click on any tab to suspend it immediately
+- **Bulk Suspension**: Hold Shift and click to suspend multiple tabs in a range
+- **Visual Feedback**: Suspended tabs are visually distinguished with reduced opacity
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### From Source
 
-```js
-export default tseslint.config({
-    extends: [
-        // Remove ...tseslint.configs.recommended and replace with this
-        ...tseslint.configs.recommendedTypeChecked,
-        // Alternatively, use this for stricter rules
-        ...tseslint.configs.strictTypeChecked,
-        // Optionally, add this for stylistic rules
-        ...tseslint.configs.stylisticTypeChecked,
-    ],
-    languageOptions: {
-        // other options...
-        parserOptions: {
-            project: ['./tsconfig.node.json', './tsconfig.app.json'],
-            tsconfigRootDir: import.meta.dirname,
-        },
-    },
-});
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd suspender
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   bun install
+   ```
+
+3. Build the extension:
+
+   ```bash
+   bun run build
+   ```
+
+4. Load the extension in Chrome:
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" in the top right
+   - Click "Load unpacked" and select the `dist` folder
+
+### Development
+
+To run the project in development mode:
+
+```bash
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This will start the Vite development server with hot reloading.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Usage
 
-export default tseslint.config({
-    plugins: {
-        // Add the react-x and react-dom plugins
-        'react-x': reactX,
-        'react-dom': reactDom,
-    },
-    rules: {
-        // other rules...
-        // Enable its recommended typescript rules
-        ...reactX.configs['recommended-typescript'].rules,
-        ...reactDom.configs.recommended.rules,
-    },
-});
+1. Click the Suspender extension icon in your Chrome toolbar
+2. A popup will display all your open tabs
+3. **Single Tab Suspension**: Click on any tab to suspend it
+4. **Multiple Tab Suspension**: Hold Shift and click on another tab to suspend all tabs in the range
+5. Suspended tabs will appear with reduced opacity and cannot be clicked again
+
+## Technology Stack
+
+- **Frontend**: React 19 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS 4.x
+- **Package Manager**: Bun
+- **Chrome APIs**: Chrome Extensions Manifest V3
+
+## Project Structure
+
 ```
+suspender/
+├── public/
+│   ├── manifest.json          # Chrome extension manifest
+│   ├── icon.png              # Extension icon
+│   ├── favicon-48x48.png     # 48x48 favicon
+│   └── favicon-128x128.png   # 128x128 favicon
+├── src/
+│   ├── App.tsx               # Main application component
+│   ├── App.css               # Application styles
+│   ├── main.tsx              # React entry point
+│   └── index.css             # Global styles
+├── package.json              # Dependencies and scripts
+├── vite.config.ts            # Vite configuration
+├── tsconfig.json             # TypeScript configuration
+└── README.md                 # This file
+```
+
+## Key Components
+
+### App.tsx
+
+The main React component that:
+
+- Fetches all open Chrome tabs using the Chrome API
+- Renders the tab list with favicons and titles
+- Handles tab suspension logic (single and bulk)
+- Manages state for tabs, errors, and user interactions
+
+### Manifest.json
+
+Chrome extension configuration that:
+
+- Defines extension metadata and permissions
+- Specifies the popup HTML file
+- Declares required Chrome API permissions
+
+## Development Scripts
+
+- `bun run dev` - Start development server
+- `bun run build` - Build for production
+- `bun run lint` - Run ESLint
+- `bun run format` - Format code with Prettier
+- `bun run preview` - Preview production build
+
+## Chrome API Permissions
+
+The extension requires the following permissions:
+
+- `tabs` - To access and manipulate browser tabs
+
+## Browser Compatibility
+
+- Chrome (Manifest V3)
+- Chromium-based browsers with extension support
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Code Style
+
+This project uses:
+
+- **ESLint** for code linting with TypeScript rules
+- **Prettier** for code formatting
+- **TypeScript** for type safety
+
+Run `bun run lint` and `bun run format` before committing.
+
+## Troubleshooting
+
+### Extension doesn't load
+
+- Ensure you've built the project with `bun run build`
+- Check that the `dist` folder contains the built files
+- Verify that Developer mode is enabled in Chrome extensions
+
+### Tabs not suspending
+
+- Check the browser console for Chrome API errors
+- Ensure the extension has the necessary `tabs` permission
+- Some system tabs cannot be suspended (chrome:// URLs)
+
+## Support
+
+If you encounter any issues or have feature requests, please open an issue on the project repository.
