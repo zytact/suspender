@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-// Define an interface for the Tab object for better type safety
 interface ChromeTab {
   id?: number;
   title?: string;
   url?: string;
   favIconUrl?: string;
+  discarded?: boolean;
 }
 
 function App() {
@@ -16,15 +16,34 @@ function App() {
   useEffect(() => {
     chrome.tabs.query({}, (loadedTabs) => {
       if (chrome.runtime.lastError) {
-        // Handle errors, e.g., if the extension doesn't have permissions
         console.error(chrome.runtime.lastError.message);
         setError(`Error fetching tabs: ${chrome.runtime.lastError.message}`);
-        setTabs([]); // Clear tabs or set to an empty array
+        setTabs([]);
         return;
       }
       setTabs(loadedTabs);
     });
   }, []);
+
+  const handleDiscardTab = (tabId: number | undefined) => {
+    if (tabId) {
+      chrome.tabs.discard(tabId, () => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            `Error discarding tab: ${chrome.runtime.lastError.message}`,
+          );
+        } else {
+          setTabs((prevTabs) =>
+            prevTabs.map((tab) =>
+              tab.id === tabId ? { ...tab, discarded: true } : tab,
+            ),
+          );
+        }
+      });
+    } else {
+      console.error("Cannot discard tab: Tab ID is undefined.");
+    }
+  };
 
   return (
     <div className="App">
@@ -34,21 +53,20 @@ function App() {
           {tabs.map((tab) => (
             <li
               key={tab.id || tab.url}
-              className="flex items-center mb-2 p-2 border border-gray-300 rounded"
+              className={`flex items-center mb-2 p-2 border border-gray-300 rounded hover:bg-gray-100 ${tab.discarded ? "opacity-50" : ""} ${!tab.discarded ? "cursor-pointer" : "cursor-not-allowed"}`}
+              onClick={() => handleDiscardTab(tab.id)}
             >
               {tab.favIconUrl && (
                 <img
                   src={tab.favIconUrl}
                   alt="favicon"
-                  className="w-4 h-4 mr-2 border border-gray-100"
+                  className="size-4 mr-2 border border-gray-100"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
                   }}
                 />
               )}
-              <span>
-                {tab.title || "No Title"} ({tab.url || "No URL"})
-              </span>
+              <span>{tab.title || "No Title"}</span>
             </li>
           ))}
         </ul>
