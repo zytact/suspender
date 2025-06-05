@@ -88,7 +88,10 @@ function App() {
 
   return (
     <div className="App">
-      <p className="pb-3 font-bold text-lg">Suspender</p>
+      <div className="flex items-center justify-center mb-3">
+        <img src="icon.png" alt="Logo" className="size-10 p-1 pb-0 mb-0 mr-2" />
+        <span className="font-bold text-lg">Suspender</span>
+      </div>
       {error && <p className="text-red-500">{error}</p>}
       {tabs.length > 0 ? (
         <ul className="list-none p-0">
