@@ -15,27 +15,27 @@ A Chrome extension built with React and TypeScript that allows you to efficientl
 
 1. Clone the repository:
 
-   ```bash
-   git clone <repository-url>
-   cd suspender
-   ```
+    ```bash
+    git clone <repository-url>
+    cd suspender
+    ```
 
 2. Install dependencies:
 
-   ```bash
-   bun install
-   ```
+    ```bash
+    bun install
+    ```
 
 3. Build the extension:
 
-   ```bash
-   bun run build
-   ```
+    ```bash
+    bun run build
+    ```
 
 4. Load the extension in Chrome:
-   - Open Chrome and navigate to `chrome://extensions/`
-   - Enable "Developer mode" in the top right
-   - Click "Load unpacked" and select the `dist` folder
+    - Open Chrome and navigate to `chrome://extensions/`
+    - Enable "Developer mode" in the top right
+    - Click "Load unpacked" and select the `dist` folder
 
 ### Development
 
