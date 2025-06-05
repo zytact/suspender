@@ -12,6 +12,9 @@ interface ChromeTab {
 function App() {
   const [tabs, setTabs] = useState<ChromeTab[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     chrome.tabs.query({}, (loadedTabs) => {
@@ -45,16 +48,55 @@ function App() {
     }
   };
 
+  const handleTabClick = (
+    clickedIndex: number,
+    event: React.MouseEvent<HTMLLIElement>,
+  ) => {
+    const clickedTab = tabs[clickedIndex];
+
+    if (!clickedTab || clickedTab.discarded) {
+      return;
+    }
+
+    if (
+      event.shiftKey &&
+      lastSelectedIndex !== null &&
+      lastSelectedIndex !== clickedIndex
+    ) {
+      event.preventDefault();
+      const start = Math.min(lastSelectedIndex, clickedIndex);
+      const end = Math.max(lastSelectedIndex, clickedIndex);
+
+      for (let i = start; i <= end; i++) {
+        const tabToDiscard = tabs[i];
+        if (
+          tabToDiscard &&
+          !tabToDiscard.discarded &&
+          tabToDiscard.id !== undefined
+        ) {
+          handleDiscardTab(tabToDiscard.id);
+        }
+      }
+    } else {
+      if (clickedTab.id !== undefined) {
+        handleDiscardTab(clickedTab.id);
+      }
+    }
+
+    setLastSelectedIndex(clickedIndex);
+  };
+
   return (
     <div className="App">
+      <p className="pb-3 font-bold text-lg">Suspender</p>
       {error && <p className="text-red-500">{error}</p>}
       {tabs.length > 0 ? (
         <ul className="list-none p-0">
-          {tabs.map((tab) => (
+          {tabs.map((tab, index) => (
             <li
               key={tab.id || tab.url}
-              className={`flex items-center mb-2 p-2 border border-gray-300 rounded hover:bg-gray-100 ${tab.discarded ? "opacity-50" : ""} ${!tab.discarded ? "cursor-pointer" : "cursor-not-allowed"}`}
-              onClick={() => handleDiscardTab(tab.id)}
+              className={`flex items-center mb-2 p-2 border border-gray-300 rounded hover:bg-gray-100 ${tab.discarded ? "opacity-50" : ""} ${!tab.discarded ? "cursor-pointer" : "cursor-not-allowed"} select-none`}
+              onClick={(e) => handleTabClick(index, e)}
             >
               {tab.favIconUrl && (
                 <img
