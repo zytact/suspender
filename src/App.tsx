@@ -96,7 +96,7 @@ function App() {
                     alt="Logo"
                     className="mr-2 mb-0 size-10 p-1 pb-0"
                 />
-                <span className="text-lg font-bold">Suspender</span>
+                <span className="text-lg font-bold">Tsukuyomi</span>
             </div>
             {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
             {tabs.length > 0 ? (

@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Suspender",
+    "name": "Tsukuyomi",
     "version": "1.0.0",
-    "description": "An extension to control tab suspending",
+    "description": "Tsukuyomi lets you manually sleep tabs to reduce memory use — clean, simple, efficient.",
     "icons": {
         "48": "favicon-48x48.png",
         "128": "favicon-128x128.png"
