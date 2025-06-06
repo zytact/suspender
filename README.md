@@ -1,4 +1,4 @@
-# Suspender
+# tsukuyomi
 
 A Chrome extension built with React and TypeScript that allows you to efficiently manage and suspend browser tabs to reduce memory usage and improve performance.
 
@@ -17,7 +17,7 @@ A Chrome extension built with React and TypeScript that allows you to efficientl
 
     ```bash
     git clone <repository-url>
-    cd suspender
+    cd tsukuyomi
     ```
 
 2. Install dependencies:
@@ -49,7 +49,7 @@ This will start the Vite development server with hot reloading.
 
 ## Usage
 
-1. Click the Suspender extension icon in your Chrome toolbar
+1. Click the tsukuyomi extension icon in your Chrome toolbar
 2. A popup will display all your open tabs
 3. **Single Tab Suspension**: Click on any tab to suspend it
 4. **Multiple Tab Suspension**: Hold Shift and click on another tab to suspend all tabs in the range
@@ -66,7 +66,7 @@ This will start the Vite development server with hot reloading.
 ## Project Structure
 
 ```
-suspender/
+tsukuyomi/
 ├── public/
 │   ├── manifest.json          # Chrome extension manifest
 │   ├── icon.png              # Extension icon
