@@ -1,4 +1,4 @@
-# tsukuyomi
+# Tsukuyomi
 
 A Chrome extension built with React and TypeScript that allows you to efficiently manage and suspend browser tabs to reduce memory usage and improve performance.
 
