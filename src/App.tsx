@@ -98,20 +98,20 @@ function App() {
                 />
                 <span className="text-lg font-bold">Suspender</span>
             </div>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
             {tabs.length > 0 ? (
                 <ul className="list-none p-0">
                     {tabs.map((tab, index) => (
                         <li
                             key={tab.id || tab.url}
-                            className={`mb-2 flex items-center rounded border border-gray-300 p-2 hover:bg-gray-100 ${tab.discarded ? 'opacity-50' : ''} ${!tab.discarded ? 'cursor-pointer' : 'cursor-not-allowed'} select-none`}
+                            className={`mb-2 flex items-center rounded border border-gray-300 p-2 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 ${tab.discarded ? 'opacity-50' : ''} ${!tab.discarded ? 'cursor-pointer' : 'cursor-not-allowed'} select-none`}
                             onClick={(e) => handleTabClick(index, e)}
                         >
                             {tab.favIconUrl && (
                                 <img
                                     src={tab.favIconUrl}
                                     alt="favicon"
-                                    className="mr-2 size-4 border border-gray-100"
+                                    className="mr-2 size-4"
                                     onError={(e) => {
                                         (
                                             e.target as HTMLImageElement
