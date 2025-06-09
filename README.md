@@ -43,16 +43,6 @@ The easiest way to build and install Tsukuyomi is using our automated build scri
     ./build.sh
     ```
 
-    This script will:
-
-    - ✅ Check all dependencies (Bun, Node.js)
-    - 📦 Install all required packages
-    - 🔍 Run code quality checks (ESLint)
-    - ✨ Format code (Prettier)
-    - 🏗️ Build the production version
-    - 📦 Create a distribution package
-    - ✅ Verify the build integrity
-
 3. **Install in your browser:**
     - Open your browser's extension management page
     - Enable "Developer mode"
