@@ -6,6 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
+        "build:complete": "./build.sh",
+        "build:package": "bun run build && cd dist && zip -r ../tsukuyomi-extension.zip ./*",
         "lint": "eslint .",
         "preview": "vite preview",
         "format": "prettier --write ."
