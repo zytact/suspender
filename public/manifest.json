@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Tsukuyomi",
-    "version": "1.0.1",
+    "version": "1.2.0",
     "description": "Tsukuyomi lets you manually sleep tabs to reduce memory use — clean, simple, efficient.",
     "icons": {
         "48": "favicon-48x48.png",
@@ -10,5 +10,10 @@
     "permissions": ["tabs"],
     "action": {
         "default_popup": "index.html"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "tsukuyomi@zytact.com"
+        }
     }
 }
