@@ -16,35 +16,78 @@ function App() {
         null
     );
 
+    // Cross-browser API detection
+    const isFirefox = typeof (globalThis as any).browser !== 'undefined';
+    const tabsAPI = isFirefox ? (globalThis as any).browser.tabs : chrome.tabs;
+    const runtimeAPI = isFirefox
+        ? (globalThis as any).browser.runtime
+        : chrome.runtime;
+
     useEffect(() => {
-        chrome.tabs.query({}, (loadedTabs) => {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError.message);
-                setError(
-                    `Error fetching tabs: ${chrome.runtime.lastError.message}`
-                );
-                setTabs([]);
-                return;
-            }
-            setTabs(loadedTabs);
-        });
-    }, []);
+        if (isFirefox) {
+            // Firefox - promise based
+            tabsAPI
+                .query({})
+                .then((loadedTabs: ChromeTab[]) => {
+                    setTabs(loadedTabs);
+                })
+                .catch((error: Error) => {
+                    console.error(error.message);
+                    setError(`Error fetching tabs: ${error.message}`);
+                    setTabs([]);
+                });
+        } else {
+            // Chrome - callback based
+            tabsAPI.query({}, (loadedTabs: ChromeTab[]) => {
+                if (runtimeAPI.lastError) {
+                    console.error(runtimeAPI.lastError.message);
+                    setError(
+                        `Error fetching tabs: ${runtimeAPI.lastError.message}`
+                    );
+                    setTabs([]);
+                    return;
+                }
+                setTabs(loadedTabs);
+            });
+        }
+    }, [isFirefox, tabsAPI, runtimeAPI]);
 
     const handleDiscardTab = (tabId: number | undefined) => {
         if (tabId) {
-            chrome.tabs.discard(tabId, () => {
-                if (chrome.runtime.lastError) {
-                    console.error(
-                        `Error discarding tab: ${chrome.runtime.lastError.message}`
-                    );
-                } else {
-                    setTabs((prevTabs) =>
-                        prevTabs.map((tab) =>
-                            tab.id === tabId ? { ...tab, discarded: true } : tab
-                        )
-                    );
-                }
-            });
+            if (isFirefox) {
+                // Firefox - promise based
+                tabsAPI
+                    .discard(tabId)
+                    .then(() => {
+                        setTabs((prevTabs) =>
+                            prevTabs.map((tab) =>
+                                tab.id === tabId
+                                    ? { ...tab, discarded: true }
+                                    : tab
+                            )
+                        );
+                    })
+                    .catch((error: Error) => {
+                        console.error(`Error discarding tab: ${error.message}`);
+                    });
+            } else {
+                // Chrome - callback based
+                tabsAPI.discard(tabId, () => {
+                    if (runtimeAPI.lastError) {
+                        console.error(
+                            `Error discarding tab: ${runtimeAPI.lastError.message}`
+                        );
+                    } else {
+                        setTabs((prevTabs) =>
+                            prevTabs.map((tab) =>
+                                tab.id === tabId
+                                    ? { ...tab, discarded: true }
+                                    : tab
+                            )
+                        );
+                    }
+                });
+            }
         } else {
             console.error('Cannot discard tab: Tab ID is undefined.');
         }
